@@ -1,0 +1,135 @@
+import os, re, time
+import ffmpegHandler
+import threading, Queue
+
+class show():
+	name = ""
+	seasons = []
+	episodes = []
+	def addSeason(self,num):
+		self.seasons.append(num)
+	def __init__(self):
+		self.episodes = []
+		self.seasons = []
+		self.name = ""
+	
+	def addEpisode(self,episode):
+		self.episodes.append(episode)
+	def getEpisodesForSeason(self,seasonnum):
+		eplist = []
+		for episode in self.episodes:
+			if episode.season is seasonnum:
+				 eplist.append(episode)
+		return eplist
+	def __unicode__(self):
+		return "%s: %d episodes "%(self.name,len(self.episodes)) + self.seasons + ""
+	def #printInfo(self):
+		#print("show %s has the seasons %s and %d episodes"%(self.name,self.seasons,len(self.episodes)))
+	
+
+class episode():
+	number = 0
+	name = ""
+	season = 0
+	osdate = 0
+	misc = False
+	image = ""
+	fileformat = ""
+	filename = ""
+	def setDetails(self,number,name,season,ff,fn):
+		self.number = number
+		self.name = name
+		self.season = season
+		self.osdate = 0
+		self.fileformat = ff
+		self.filename = fn
+	def __unicode__(self):
+		return ""
+class imageThread(threading.Thread):
+	
+	def run(self):
+		while True:
+			movie = self.queue.get()
+			path = movie['path']
+			moviefile = movie['mv']
+			#print "just got %s on the %s path"%(moviefile,path)
+			ffmpegHandler.getFrame(path+'/'+moviefile,"/Users/neil/Desktop/VidiiU/images/"+moviefile)
+			self.queue.task_done()
+	def __init__(self, queue):
+		#print "thread started"
+		threading.Thread.__init__(self)
+		self.queue = queue
+		
+		
+class showStore():
+	store = {}
+	
+	def add(self,item):
+		self.store[item] = []
+		
+	def fillStore(self,path):
+		queue = Queue.Queue()
+		for i in range(2):
+			t = imageThread(queue)
+			t.start()
+		filelist = self.getFileList(path)
+		for moviefile in filelist:
+			#print moviefile
+			d = detailPlucker(moviefile)
+			thisEpisode = episode()
+			thisEpisode.setDetails(d['episode'],d['show'],d['season'],d['filetype'],moviefile)
+			thisEpisode.osdate = os.path.getctime(path+'/'+moviefile);
+			##print details['show']
+			showname = str.upper(d['show'])
+			
+			queue.put({'path':path,'mv':moviefile})
+			
+			if showname not in self.store:
+				self.store[showname] = show()
+				self.store[showname].name = showname
+				self.store[showname].addEpisode(thisEpisode)
+			else:
+				self.store[showname].addEpisode(thisEpisode)
+			if d['season'] not in self.store[showname].seasons:
+				self.store[showname].seasons.append(d['season'])
+		for showp in self.store.keys():
+			self.store[showp].#printInfo()
+		
+		
+		
+	def __unicode__(self):
+		return self.store.name
+	
+	def getFileList(self,path):
+		filelist = os.listdir(path)
+		return [file for file in filelist if (file.split('.')[-1] == 'mp4' or file.split('.')[-1] == 'mkv')]
+		
+
+def detailPlucker(episodeString):
+	show = ""
+	episode = 0
+	season = 0
+	filename = episodeString
+	# Error checking omitted!
+	parts = episodeString.split('.')
+	known = False
+	index = 0
+	for part in parts:
+		match = re.search(r"(?:s|season)(\d{2})(?:e|x|episode|\n)(\d{2})", part,re.I)
+		if match is not None:
+			episode = int(match.group(2))
+			season = int(match.group(1))
+			show = ' '.join(parts[:index])
+			known = True
+		index += 1
+	if known is False:
+		show = "unknown"
+	
+	filetype = parts[-1]
+	##print episode,season,filetype
+	##print show
+	return {'show':show,'season':season,'episode':episode,'filetype':filetype}
+
+def runTest():
+	detailPlucker(r'Its.Always.Sunny.in.Philadelphia.S08E01.HDTV.x264-EVOLVE.mkv')
+	detailPlucker(r'How.I.Met.Your.Mother.S08E01.HDTV.x264-LOL.[VTV].mp4')

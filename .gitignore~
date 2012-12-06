@@ -33,9 +33,3 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-
-
-# My Junk
-/images/
-images/*
-images/
