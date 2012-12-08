@@ -1,12 +1,9 @@
 import subprocess,os
 import shlex
 def convert(filename):
-    cmd = ['ffmpeg','-i', filename, 'input', '-acodec', 'aac', '-ab', '128kb', '-vcodec', 'mpeg4', '-b', '1200kb', '-mbd', '2', '-flags','+4mv+trell', '-aic', '2', '-cmp', '2', '-subcmp', '2', '-title', 'X', '~/tmp/final_video.mp4']
+    cmd = "ffmpeg -i %s input -acodec aac -ab 128kb -vcodec mpeg4 -b 1200kb -mbd 2 -flags +4mv+trell -aic 2 -cmp 2 -subcmp 2 -s 320x180 -title X %s.tmp.mp4"%(filename,filename)
     print cmd
     subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print cmd
-    newVideo = open('~/tmp/final_video.mp4')
-    return newVideo
 
 def getFrame(filepath,outputname):
 	if not (os.path.exists(outputname+'.png')):

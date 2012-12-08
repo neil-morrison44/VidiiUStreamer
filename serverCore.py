@@ -15,6 +15,7 @@ class Hello(Resource):
 	def render_GET(self, request):
 		print request.prepath
 		if len(request.prepath[0]) < 2:
+			self.store.updateStore()
 			return self.template.fillTemplate(self.store.store)
 		else:
 			return Hello.accessFile(self,request.prepath[0],request)
@@ -39,7 +40,20 @@ class Hello(Resource):
 
 site = server.Site(Hello())
 reactor.listenTCP(8000, site)
+ 
+class TransCodingFile(static.File):
+	def render(self,request):
+		print request
+		print dir(request)
+		print request.path
+		if (request.path.split('.')[-1] != 'mp4'):
+			print request.path.split('.')[-1]
+			ffmpegHandler.convert('../../Torrents'+request.path)
+		request.path = request.path + ".tmp.mp4"
+		return static.File.render(self,request)
 
-MovieSite = server.Site(static.File('../../Torrents',defaultType='video/octet-stream'))
+
+
+MovieSite = server.Site(TransCodingFile('../../Torrents',defaultType='video/octet-stream'))
 reactor.listenTCP(8800, MovieSite)
 reactor.run()

@@ -23,8 +23,8 @@ class show():
 		return eplist
 	def __unicode__(self):
 		return "%s: %d episodes "%(self.name,len(self.episodes)) + self.seasons + ""
-	def #printInfo(self):
-		#print("show %s has the seasons %s and %d episodes"%(self.name,self.seasons,len(self.episodes)))
+	def printInfo(self):
+		print("show %s has the seasons %s and %d episodes"%(self.name,self.seasons,len(self.episodes)))
 	
 
 class episode():
@@ -45,16 +45,25 @@ class episode():
 		self.filename = fn
 	def __unicode__(self):
 		return ""
+		
+		
+		
 class imageThread(threading.Thread):
-	
+	#thread runner will use "emptyRuns" so it doesn't just run for ever - if the queue's empty for 220 times in a row it'll quit
 	def run(self):
-		while True:
+		emptyRuns = 0
+		while (emptyRuns < 220):
+			if (self.queue.empty()):
+				emptyRuns += 1
+			else:
+				emptyRuns = 0
 			movie = self.queue.get()
 			path = movie['path']
 			moviefile = movie['mv']
 			#print "just got %s on the %s path"%(moviefile,path)
-			ffmpegHandler.getFrame(path+'/'+moviefile,"/Users/neil/Desktop/VidiiU/images/"+moviefile)
+			ffmpegHandler.getFrame(path+'/'+moviefile,"./images/"+moviefile)
 			self.queue.task_done()
+		
 	def __init__(self, queue):
 		#print "thread started"
 		threading.Thread.__init__(self)
@@ -63,16 +72,19 @@ class imageThread(threading.Thread):
 		
 class showStore():
 	store = {}
-	
+	path = ""
+	filelist = ""
 	def add(self,item):
 		self.store[item] = []
 		
 	def fillStore(self,path):
+		self.path = path
 		queue = Queue.Queue()
 		for i in range(2):
 			t = imageThread(queue)
 			t.start()
 		filelist = self.getFileList(path)
+		self.filelist = filelist
 		for moviefile in filelist:
 			#print moviefile
 			d = detailPlucker(moviefile)
@@ -93,8 +105,39 @@ class showStore():
 			if d['season'] not in self.store[showname].seasons:
 				self.store[showname].seasons.append(d['season'])
 		for showp in self.store.keys():
-			self.store[showp].#printInfo()
-		
+			self.store[showp].printInfo()
+	
+	def updateStore(self):
+		newfilelist = []
+		queue = Queue.Queue()
+		for i in range(2):
+			t = imageThread(queue)
+			t.start()
+		allfilelist = self.getFileList(self.path)
+		for filename in allfilelist:
+			if filename not in self.filelist:
+				newfilelist.append(filename)
+		for moviefile in newfilelist:
+			#print moviefile
+			d = detailPlucker(moviefile)
+			thisEpisode = episode()
+			thisEpisode.setDetails(d['episode'],d['show'],d['season'],d['filetype'],moviefile)
+			thisEpisode.osdate = os.path.getctime(path+'/'+moviefile);
+			##print details['show']
+			showname = str.upper(d['show'])
+			
+			queue.put({'path':path,'mv':moviefile})
+			
+			if showname not in self.store:
+				self.store[showname] = show()
+				self.store[showname].name = showname
+				self.store[showname].addEpisode(thisEpisode)
+			else:
+				self.store[showname].addEpisode(thisEpisode)
+			if d['season'] not in self.store[showname].seasons:
+				self.store[showname].seasons.append(d['season'])
+		for showp in self.store.keys():
+			self.store[showp].printInfo()
 		
 		
 	def __unicode__(self):
@@ -130,6 +173,3 @@ def detailPlucker(episodeString):
 	##print show
 	return {'show':show,'season':season,'episode':episode,'filetype':filetype}
 
-def runTest():
-	detailPlucker(r'Its.Always.Sunny.in.Philadelphia.S08E01.HDTV.x264-EVOLVE.mkv')
-	detailPlucker(r'How.I.Met.Your.Mother.S08E01.HDTV.x264-LOL.[VTV].mp4')
