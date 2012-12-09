@@ -1,8 +1,9 @@
 import Tkinter as tk
+import tkMessageBox
 import tkFileDialog
 from socket import gethostname
 import serverCore
-import threading
+import time
 
 class ServerGUI(tk.Frame):
 	hostname = gethostname()
@@ -35,46 +36,48 @@ class ServerGUI(tk.Frame):
 		self.status_l2 = tk.Label(self,text="http://%s:8000"%(self.hostname),fg="gray")
 		self.status_l2.grid(row=3,column=1)
 		
+		self.warningLabel = tk.Label(self,text="WARNING: When you start the server this window will minimise then appear to crash. This means it's working.", fg="red")
+		self.warningLabel.grid(row=6,columnspan=3)
+		
+		self.warningLabel2 = tk.Label(self,text="Sorry about that. There'll be an update to make it nicer soon...",fg="red")
+		self.warningLabel2.grid(row=7,columnspan=3)
+		
 		
 	def getDirectory(self):
 		self.path = tkFileDialog.askdirectory(**self.dir_opt)
+		if self.path == "":
+			self.path = " "*80
 		self.text_directory["text"] = self.path
 		self.serverManager.setPath(self.path)
 		print self.path
 	def onStop(self):
 		if self.running:
 			self.serverManager.stop()
-			self.status_l1["text"] = "Server Stopped at"
+			self.status_l1["text"] = "Server Stopped at:"
 			self.status_l2["fg"] = "gray"
 			self.button_stopServer["text"] = "Start Server"
 			self.running = False
 		else:
-			
-			self.status_l1["text"] = "Server Running at"
-			self.status_l2["fg"] = "black"
-			self.button_stopServer["text"] = "Stop Server"
-			self.button_stopServer["fg"] = "red"
-			self.running = True
-			self.serverManager.run()
+			if (self.path != " "*80):
+				self.status_l1["text"] = "Server Running at:"
+				self.status_l2["fg"] = "black"
+				self.button_stopServer["text"] = "Stop Server"
+				self.button_stopServer["state"] = tk.DISABLED
+				self.button_refreshShows["state"] = tk.DISABLED
+				self.button_directory["state"] = tk.DISABLED
+				self.button_stopServer["fg"] = "red"
+				self.running = True
+				#self.master.wm_state('iconic')
+				self.master.update_idletasks()
+				time.sleep(10)
+				self.master.iconify()
+				self.serverManager.run()
+			else:
+				tkMessageBox.showinfo("No Path Set","Please set the location for your videos by clicking 'Browse'.")
 	
 #tkinter doesn't thread well...twisted doesn't thread well. Bugger.
-class GUIThread(threading.Thread):
-	#thread runner will use "emptyRuns" so it doesn't just run for ever - if the queue's empty for 220 times in a row it'll quit
-	def run(self):
-		self.root = ServerGUI(self.serverManager)
-		self.root.master.title("VidiiU Streamer")
-		self.root.mainloop()
-		
-	def __init__(self, sM,root):
-		#print "thread started"
-		self.root = root
-		threading.Thread.__init__(self)
-		self.serverManager = sM
-root = {}
-t = GUIThread(serverCore.serverManager(),root)
-t.start()
 
 
-#root = ServerGUI(serverCore.serverManager())
-#root.master.title("VidiiU Streamer")
-#root.mainloop()
+root = ServerGUI(serverCore.serverManager())
+root.master.title("VidiiU Streamer [Beta]")
+root.mainloop()
