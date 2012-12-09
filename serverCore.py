@@ -3,12 +3,20 @@ from twisted.web import static, server
 from twisted.web.resource import Resource
 import ffmpegHandler, showManager, templateHandler, os
 
-class Hello(Resource):
-	path = '../../Torrents'
-	store = showManager.showStore()
-	store.fillStore(path)
-	print store
-	template = templateHandler.template()
+
+class VidiiUServer(Resource):
+	filepath = '../../Torrents'
+	children = []
+	def __init__(self,path):
+		self.filepath = path
+		self.store = {}
+		self.template = {}
+		
+	def getShows(self):
+		self.store = showManager.showStore()
+		self.store.fillStore(self.filepath)
+		self.template = templateHandler.template()
+		
 	def getChild(self, name, request):
 		return self
 
@@ -18,7 +26,7 @@ class Hello(Resource):
 			self.store.updateStore()
 			return self.template.fillTemplate(self.store.store)
 		else:
-			return Hello.accessFile(self,request.prepath[0],request)
+			return self.accessFile(request.prepath[0],request)
 			
 
 	def accessFile(self,name,request):
@@ -38,14 +46,15 @@ class Hello(Resource):
 			print name + ' failed'
 			return 'failed'
 
-site = server.Site(Hello())
-reactor.listenTCP(8000, site)
+
  
+		
+	
 class TransCodingFile(static.File):
 	def render(self,request):
-		print request
-		print dir(request)
-		print request.path
+		#print request
+		#print dir(request)
+		#print request.path
 		if (request.path.split('.')[-1] != 'mp4'):
 			print request.path.split('.')[-1]
 			ffmpegHandler.convert('../../Torrents'+request.path)
@@ -54,6 +63,33 @@ class TransCodingFile(static.File):
 
 
 
-MovieSite = server.Site(TransCodingFile('../../Torrents',defaultType='video/octet-stream'))
-reactor.listenTCP(8800, MovieSite)
-reactor.run()
+class serverManager():
+	t = {}
+	def __init__(self,path=""):
+		self.path = path
+		self.movieSite = {}
+		self.site = {}
+		self.vidiiUServer = {}
+		
+	def run(self):
+
+		self.vidiiUServer = VidiiUServer(self.path)
+		self.vidiiUServer.getShows()
+		self.site = server.Site(self.vidiiUServer)
+		print "set vid site"
+		self.movieSite = server.Site(TransCodingFile(self.path,defaultType='video/octet-stream'))
+		print "set mov site"
+		reactor.listenTCP(8800, self.movieSite)
+		reactor.listenTCP(8000, self.site)
+		print "listening on both TCPs"
+		reactor.run()
+		print "reactor running"
+		
+	def stop(self):
+		reactor.stop()
+	
+	def setPath(self,path):
+		#self.stop()
+		self.path = path
+		
+		 

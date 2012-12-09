@@ -74,15 +74,23 @@ class showStore():
 	store = {}
 	path = ""
 	filelist = ""
+	def __init__(self):
+		self.store = {}
+		self.path = ""
+		self.filelist = ""
+	
 	def add(self,item):
 		self.store[item] = []
 		
 	def fillStore(self,path):
+		self.store = {}
 		self.path = path
+		
 		queue = Queue.Queue()
 		for i in range(2):
 			t = imageThread(queue)
 			t.start()
+		
 		filelist = self.getFileList(path)
 		self.filelist = filelist
 		for moviefile in filelist:

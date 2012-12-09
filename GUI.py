@@ -1,54 +1,80 @@
 import Tkinter as tk
 import tkFileDialog
+from socket import gethostname
+import serverCore
+import threading
 
-root = tk.Tk()
-
-
-class ServerGUI:
-	def __init__(self,master):
+class ServerGUI(tk.Frame):
+	hostname = gethostname()
+	running = False
+	def __init__(self,sM,master=None):
+		self.running = False
 		self.dir_opt = options = {}
-		self.path = ""
+		self.path = " "*80
+		self.serverManager = sM
 		
-		frame = tk.Frame(master,height=3)
-		
-		
-		frame.columnconfigure(0, pad=3)
-		frame.columnconfigure(1, pad=3)
-		frame.columnconfigure(2, pad=3)
-		frame.columnconfigure(3, pad=3)
-		
-		frame.rowconfigure(0, pad=3)
-		frame.rowconfigure(1, pad=3)
-		frame.rowconfigure(2, pad=3)
-		frame.rowconfigure(3, pad=3)
-		frame.rowconfigure(4, pad=3)
-		
-		frame.pack()
-		self.label_directory = tk.Label(frame,text="Content Directory:")
+		tk.Frame.__init__(self,master)
+		self.grid()
+		self["bg"] = "white"
+		self.label_directory = tk.Label(self,text="Video Directory:")
 		self.label_directory.grid(row=0,column=0)
-		self.label_directory.pack(side=tk.LEFT)
 		
-		self.button_directory = tk.Button(frame,text="Browse",command=self.getDirectory)
-		self.button_directory.pack(side=tk.RIGHT)
+		self.button_directory = tk.Button(self,text="Browse",command=self.getDirectory)
+		self.button_directory.grid(row=1,column=2)
 		
-		self.text_directory = tk.Label(frame,text="//"+self.path,bg="white",bd=1)
-		self.text_directory.pack(side=tk.LEFT,fill=tk.X)
+		self.text_directory = tk.Label(self,text=self.path,bg="white",bd=1,relief="solid")
+		self.text_directory.grid(row=1,column=1,columnspan=1)
 		
-		self.button_stopServer = tk.Button(frame, text="Stop Server", fg="red",command=frame.quit)
-		self.button_refreshShows = tk.Button(frame, text="Refresh Shows", fg="red",command=frame.quit)
-		self.button_refreshShows.pack(side=tk.LEFT)
-		self.button_stopServer.pack(side=tk.BOTTOM)
+		self.button_stopServer = tk.Button(self, text="Start Server", fg="red",command=self.onStop)
+		self.button_refreshShows = tk.Button(self, text="Refresh Shows", fg="red",command=self.quit)
+		self.button_refreshShows.grid(row=4,column=0)
+		self.button_stopServer.grid(row=4,column=2)
 		
-		self.status = tk.Label(frame,text="Server Running")
-		self.status.pack(side=tk.BOTTOM)
+		self.status_l1 = tk.Label(self,text="Server Stopped at:")
+		self.status_l1.grid(row=2,column=0)
+		self.status_l2 = tk.Label(self,text="http://%s:8000"%(self.hostname),fg="gray")
+		self.status_l2.grid(row=3,column=1)
 		
 		
 	def getDirectory(self):
 		self.path = tkFileDialog.askdirectory(**self.dir_opt)
+		self.text_directory["text"] = self.path
+		self.serverManager.setPath(self.path)
 		print self.path
+	def onStop(self):
+		if self.running:
+			self.serverManager.stop()
+			self.status_l1["text"] = "Server Stopped at"
+			self.status_l2["fg"] = "gray"
+			self.button_stopServer["text"] = "Start Server"
+			self.running = False
+		else:
+			
+			self.status_l1["text"] = "Server Running at"
+			self.status_l2["fg"] = "black"
+			self.button_stopServer["text"] = "Stop Server"
+			self.button_stopServer["fg"] = "red"
+			self.running = True
+			self.serverManager.run()
 	
+#tkinter doesn't thread well...twisted doesn't thread well. Bugger.
+class GUIThread(threading.Thread):
+	#thread runner will use "emptyRuns" so it doesn't just run for ever - if the queue's empty for 220 times in a row it'll quit
+	def run(self):
+		self.root = ServerGUI(self.serverManager)
+		self.root.master.title("VidiiU Streamer")
+		self.root.mainloop()
+		
+	def __init__(self, sM,root):
+		#print "thread started"
+		self.root = root
+		threading.Thread.__init__(self)
+		self.serverManager = sM
+root = {}
+t = GUIThread(serverCore.serverManager(),root)
+t.start()
 
-controls = ServerGUI(root)
-root.geometry("300x280")
-root.title("VidiiU Streamer")
-root.mainloop()
+
+#root = ServerGUI(serverCore.serverManager())
+#root.master.title("VidiiU Streamer")
+#root.mainloop()

@@ -49,7 +49,7 @@
 	 width:30%;
 	 min-height:400px;
 	 right:1em;
-	 top:20%;
+	 top:60%;
 	 border-style:dashed;
 	 border-color:gray;
 	 background-color: rgba(226,226,226,0.58);
@@ -60,7 +60,7 @@
 	 width:60%;
 	 min-height:400px;
 	 left:1em;
-	 top:20%;
+	 top:60%;
 	 background-color: rgba(226,226,226,0.58);
  }
  p{
@@ -86,6 +86,9 @@
  }
  .dOption:hover{
 	 background-color: rgba(200,200,226,0.90);
+ }
+ #downloads a{
+	 text-decoration: none;
  }
  
  .dOption .link{
@@ -121,6 +124,35 @@
 	 background-position: -100px 0px;
 
  }
+ #screenshots{
+	 height:38%;
+	 overflow-y:hidden;
+	 overflow-x:scroll;
+	 width:90%;
+	 top:16%;
+	 position:absolute;
+	 padding:1em;
+	 background:rgba(214,214,214,0.84);
+	 box-shadow: inset 0px 10px 11px 8px #70d2ff,0px 0px 11px 8px #70d2ff;
+ }
+  #screenshots #backing{
+	 height:100%;
+	 width:160%;
+	 margin-left:1em;
+	 bacfkground:rgba(214,214,214,0.84);
+ }
+ #screenshots img{
+	 display:inline;
+	 height:90%;
+	 width:auto;
+	 margin-left:1em;
+	 box-shadow:0px 10px 11px 8px rgba(0,0,0,0.47);
+ }
+ #footer{
+	 position:absolute;
+	 top:140%;
+	 height:5%;
+ }
  </style>
  <script type="text/javascript">
  </script>
@@ -140,6 +172,11 @@
 </div>
 </div>
  </div>
+ <div id="screenshots">
+ 	<div id="backing">
+	 <img src="screenshots/1.JPG"><img src="screenshots/2.JPG"><img src="screenshots/3.JPG">
+ 	</div>
+ </div>
  
  <section id="about">
  <H2>About</H2>
@@ -157,10 +194,9 @@
  <li>Support for Transcoding (turning videos that aren't playable on the WiiU into videos that are)</li>
  </ul>
  <H2>Contact Me</H2>
- <p>If you run into any problems contact me at either <a href="http://twitter.com/VidiiUStreamer">@VidiiUStreamer</a> on twitter or email
+ <p>If you run into any problems contact me at either <a href="http://twitter.com/VidiiUStreamer"><b>@VidiiUStreamer</b> on twitter</a> or <a href="mailto:support@vidiiustreamer.com">email <b>support@vidiiustreamer.com</b></a>
  </section>
-<div id="screenshots"></div>
- 
+
  <div id="downloads">
  	<a href="downloadlink">
 	 <div id="windows" class="dOption">
@@ -176,15 +212,15 @@
 		 <div class="link">http://fakedownloadlink.com/thing.zip</div>
 	 </div>
 	 </a>
-	 <a href="downloadlink">
+	 <a href="https://github.com/neil-morrison44/VidiiUStreamer">
 	 <div id="github" class="dOption">
 		 <div id="gitIcon" class="icon"></div>
 		 <H3>Browse Source at GitHub</H3>
-		 <div class="link">http://fakedownloadlink.com/thing.zip</div>
+		 <div class="link">github.com/neil-morrison44/VidiiUStreamer</div>
 	 </div>
 	 </a>
  </div>
  </div>
- 
+ <div id="footer">Hello</div>
  </body>
  </html>
