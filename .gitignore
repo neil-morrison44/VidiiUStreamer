@@ -39,3 +39,7 @@ nosetests.xml
 /images/
 images/*
 images/
+
+#Mac DS_Store
+.DS_Store
+*~
