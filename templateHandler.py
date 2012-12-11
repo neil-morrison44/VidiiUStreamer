@@ -75,7 +75,7 @@ class template():
 			if string is not None:
 				showsString += string
 		filledTemplate = self.templateString.replace('[[dunstable]]',showsString)
-		return filledTemplate
+		return str(filledTemplate)
 		
 	#when given a list will return two lists, one with odd items and one with even within a list 
 	def unzip(self,zippedlist):

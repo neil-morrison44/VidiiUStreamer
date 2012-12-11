@@ -32,11 +32,13 @@ class VidiiUServer(Resource):
 	def accessFile(self,name,request):
 		try:
 			fileType = (name.split('.')[-1])
-			request.setHeader('Content-Type',"video/%s"%fileType)
+			request.setHeader('Content-Type',"image/octet-stream")
 			if fileType == 'png':
-				f = file('images/'+name)
+				request.setHeader('Content-Type',"image/png")
+				f = open('images/'+name,'rb')
 			elif fileType == 'ico':
-				f = file('images/favicon.ico')
+				request.setHeader('Content-Type',"image/ico")
+				f = open('images/favicon.ico','rb')
 			else:
 				#f = ffmpegHandler.convert('test/'+name)
 				print 'failed to get %s'%(name)

@@ -100,7 +100,7 @@ class showStore():
 			thisEpisode.setDetails(d['episode'],d['show'],d['season'],d['filetype'],moviefile)
 			thisEpisode.osdate = os.path.getctime(path+'/'+moviefile);
 			##print details['show']
-			showname = str.upper(d['show'])
+			showname = str.upper(str(d['show']))
 			
 			queue.put({'path':path,'mv':moviefile})
 			
