@@ -4,15 +4,25 @@ import tkFileDialog
 from socket import gethostname
 import serverCore
 import time
+import permanence
+import webbrowser
+
+#import pdb
+#pdb.set_trace()
 
 class ServerGUI(tk.Frame):
 	hostname = gethostname()
+	storage = permanence.localStorage()
 	running = False
 	def __init__(self,sM,master=None):
 		self.running = False
 		self.dir_opt = options = {}
-		self.path = " "*80
 		self.serverManager = sM
+		self.path = " "*80
+		self.path = str(self.storage.read("path"))
+		if (self.path != " "*80):
+			self.serverManager.setPath(self.path)
+			print self.path
 		
 		tk.Frame.__init__(self,master)
 		self.grid()
@@ -42,14 +52,23 @@ class ServerGUI(tk.Frame):
 		self.warningLabel2 = tk.Label(self,text="Sorry about that. There'll be an update to make it nicer soon...",fg="red")
 		self.warningLabel2.grid(row=7,columnspan=3)
 		
-		
+		#update check on launch
+		update = permanence.checkUpdate()
+		if (update != False):
+			if (tkMessageBox.askyesno("Download Update?",update[0])):
+				webbrowser.open_new(update[1])
+			
 	def getDirectory(self):
-		self.path = tkFileDialog.askdirectory(**self.dir_opt)
-		if self.path == "":
-			self.path = " "*80
+		newpath = tkFileDialog.askdirectory(**self.dir_opt)
+		if newpath != "":
+			self.path = newpath
 		self.text_directory["text"] = self.path
 		self.serverManager.setPath(self.path)
 		print self.path
+		self.storage.store({"path":self.path})
+		if (self.storage.read("FirstRun") == 1):
+			tkMessageBox.showinfo("First Run...","This looks like the first time you've run this, your computer will work quite hard generating the thumbnail images for all the videos.")
+			self.storage.store({"FirstRun":0})
 	def onStop(self):
 		if self.running:
 			self.serverManager.stop()
@@ -69,7 +88,7 @@ class ServerGUI(tk.Frame):
 				self.running = True
 				#self.master.wm_state('iconic')
 				self.master.update_idletasks()
-				time.sleep(10)
+				time.sleep(4)
 				self.master.iconify()
 				self.serverManager.run()
 			else:

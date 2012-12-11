@@ -35,10 +35,6 @@ nosetests.xml
 .pydevproject
 
 
-# My Junk
-/images/
-images/*
-images/
 
 #Mac DS_Store
 .DS_Store

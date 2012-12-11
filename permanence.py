@@ -11,27 +11,45 @@ def checkUpdate():
 		updateObject = json.loads(updateManif.read())
 		print updateObject["version"]
 		global thisVersion
+		global thisPlatform
+		link = str(updateObject["link"]).replace('%s',thisPlatform)
 		if thisVersion < updateObject["version"]:
-			print "update available, download at %s. Changes include... %s"%(updateObject["link"],updateObject["changes"])
-		
-		return [updateString,updateObject["link"]]
+			updateString = "Changes include... %s"%(updateObject["changes"])
+		else:
+			print "latest"
+			raise Exception("This version is latest.")
+		return [updateString,link]
 	except:
 		#either not connected to the internet or what we got wasn't JSON. no biggy.
 		print "update failed"
 		return False
 
-#test
-checkUpdate()
 
 class localStorage():
 	datadict = {}
-	def __init__():
-		datafile = "settings.txt"
-		datadict = json.load(open("settings.txt").read())
+	datafile = "config.txt"
+	def __init__(self):
+		self.datadict = {}
+		if not (os.path.exists(self.datafile)):
+			open("config.txt",'w+').write("{}")
+			self.datadict = {}
+		self.datadict = json.load(open("config.txt",'r'))
 		
 	
 	
-	def store(self,valuepair):
-		pass
+	def store(self,newdict):
+		for key in newdict.keys():
+			self.datadict[key] = newdict[key]
+		self.write()
 	def read(self,key):
-		pass
+		try:
+			return self.datadict[key]
+		except:
+			return " "*80
+	def clear(self):
+		self.datadict = {}
+		open("config.txt",'w+').write("{}")
+	
+	def write(self):
+		open("config.txt",'w+').write(json.dumps(self.datadict))
+

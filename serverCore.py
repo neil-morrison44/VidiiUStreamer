@@ -21,7 +21,7 @@ class VidiiUServer(Resource):
 		return self
 
 	def render_GET(self, request):
-		print request.prepath
+		#print request.prepath
 		if len(request.prepath[0]) < 2:
 			self.store.updateStore()
 			return self.template.fillTemplate(self.store.store)
@@ -33,13 +33,13 @@ class VidiiUServer(Resource):
 		try:
 			fileType = (name.split('.')[-1])
 			request.setHeader('Content-Type',"video/%s"%fileType)
-			if fileType == 'mp4':
-				f = file(self.path+'/'+name)
-			elif fileType == 'png':
+			if fileType == 'png':
 				f = file('images/'+name)
+			elif fileType == 'ico':
+				f = file('images/favicon.ico')
 			else:
 				#f = ffmpegHandler.convert('test/'+name)
-				print 'tried to get %s'%(name)
+				print 'failed to get %s'%(name)
 			return f.read()
 		except:
 			request.setHeader('Content-Type',"text/plain")
@@ -76,9 +76,7 @@ class serverManager():
 		self.vidiiUServer = VidiiUServer(self.path)
 		self.vidiiUServer.getShows()
 		self.site = server.Site(self.vidiiUServer)
-		print "set vid site"
 		self.movieSite = server.Site(TransCodingFile(self.path,defaultType='video/octet-stream'))
-		print "set mov site"
 		reactor.listenTCP(8800, self.movieSite)
 		reactor.listenTCP(8000, self.site)
 		print "listening on both TCPs"
