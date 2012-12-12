@@ -15,5 +15,5 @@ def getFrame(filepath,outputname):
 		cmd = "./ffmpeg -i %s -ss 00:02:30 -f image2 -vframes 1 -s \"160x120\" %s.png"%(filepath,outputname)
 		global windows
 		if windows:
-    		cmd.replace('ffmpeg','ffmpeg.exe')
+			cmd.replace('ffmpeg','ffmpeg.exe')
 		subprocess.call(shlex.split(cmd))
