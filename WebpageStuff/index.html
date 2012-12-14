@@ -156,6 +156,21 @@
  </style>
  <script type="text/javascript">
  </script>
+ 
+ <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37039797-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+ 
  </head>
  <body>
  <div id="container">
@@ -185,34 +200,35 @@
  <H2>Current Features</H2>
  <ul>
  <li>Play your mp4 videos on the WiiU.</li>
- <li>Sorts videos of the form <i>Show.Name.S01E01...</i> together into shows with different lists for each season</li>
- <li>Every episode gets its own Thumbnail</li>
+ <li>Sorts videos of the form <i>Show.Name.S01E01...</i> together into shows with different sections for each season</li>
+ <li>Every episode has its own Thumbnail</li>
  <li>Videos downloaded in the last 2 days have a 'new' tag</li>
  </ul>
  <H2>Future Features</H2>
  <ul>
  <li>Support for Transcoding (turning videos that aren't playable on the WiiU into videos that are)</li>
+ <li>Improved GUI, the current one is quite...lacking. (Also options like port config, file names ect)</li>
  </ul>
  <H2>Contact Me</H2>
  <p>If you run into any problems contact me at either <a href="http://twitter.com/VidiiUSupport"><b>@VidiiUSupport</b> on twitter</a> or <a href="mailto:support@vidiiustreamer.com">email <b>support@vidiiustreamer.com</b></a>
  </section>
 
  <div id="downloads">
- 	<a href="downloadlink">
+ 	<a href="/download_0.8_Win.zip" onlcick="_gaq.push(['_trackEvent', 'Downloads', 'Win']);">
 	 <div id="windows" class="dOption">
 		 <div id="windowsIcon" class="icon"></div>
 		 <H3>Download for Windows</H3>
-		 <div class="link">Coming Soon</div>
+		 <div class="link">/download_0.8_Win.zip</div>
 	 </div>
 	 </a>
-	 <a href="download_0.8_Mac.zip">
+	 <a href="download_0.8_Mac.zip" onclick="_gaq.push(['_trackEvent', 'Downloads', 'Win']);">
 	 <div id="mac" class="dOption">
 		 <div id="macIcon" class="icon"></div>
 		 <H3>Download for Mac</H3>
 		 <div class="link">/download_0.8_Mac.zip</div>
 	 </div>
 	 </a>
-	 <a href="https://github.com/neil-morrison44/VidiiUStreamer">
+	 <a href="https://github.com/neil-morrison44/VidiiUStreamer" onclick="_gaq.push(['_trackEvent', 'Downloads', 'Git']);">
 	 <div id="github" class="dOption">
 		 <div id="gitIcon" class="icon"></div>
 		 <H3>Browse Source at GitHub</H3>
