@@ -38,6 +38,7 @@ nosetests.xml
 images/
 tmp/
 .m3u8
+ffmpeg
 
 #Mac DS_Store
 .DS_Store
