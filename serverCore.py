@@ -1,8 +1,12 @@
 from twisted.internet import reactor
 from twisted.web import static, server
 from twisted.web.resource import Resource
+from twisted.web.error import NoResource
 import ffmpegHandler, showManager, templateHandler, os
+from twisted.web.server import NOT_DONE_YET
 
+from twisted.python.log import err
+from twisted.protocols.basic import FileSender
 
 class VidiiUServer(Resource):
 	filepath = '../../Torrents'
@@ -42,7 +46,13 @@ class VidiiUServer(Resource):
 			else:
 				#f = ffmpegHandler.convert('test/'+name)
 				print 'failed to get %s'%(name)
-			return f.read()
+			def cbFinished(ignored):
+					f.close()
+					request.finish()
+			
+			d = FileSender().beginFileTransfer(f,request)
+			d.addErrback(err).addCallback(cbFinished)
+			return NOT_DONE_YET
 		except:
 			request.setHeader('Content-Type',"text/plain")
 			print name + ' failed'
@@ -50,18 +60,45 @@ class VidiiUServer(Resource):
 
 
  
-		
+once = True		
 	
 class TransCodingFile(static.File):
+	isLeaf = True;
 	def render(self,request):
+		global once
 		#print request
 		#print dir(request)
-		#print request.path
-		if (request.path.split('.')[-1] != 'mp4'):
+		print request.path
+		if (request.path.split('.')[-1] == 'mkv'):
+			print once
 			print request.path.split('.')[-1]
-			ffmpegHandler.convert('../../Torrents'+request.path)
-		request.path = request.path + ".tmp.mp4"
-		return static.File.render(self,request)
+			request.setHeader('Content-Type',"application/x-mpegurl")
+			if (once):
+				ffmpegHandler.convert('../../Torrents',request.path)
+				once = False
+			f = open('playlist.m3u8','rb')
+			def cbFinished(ignored):
+					f.close()
+					request.finish()
+			
+			d = FileSender().beginFileTransfer(f,request)
+			d.addErrback(err).addCallback(cbFinished)
+			
+			return NOT_DONE_YET
+		elif(request.path.split('.')[-1] == 'ts'):
+			print ('tsin\' with the best of them')
+			request.setHeader('Content-Type','video/MP2T')
+			print (request.path + '<--------')
+			f = open(request.path[1:],'rb')
+			def cbFinished(ignored):
+					f.close()
+					request.finish()
+			
+			d = FileSender().beginFileTransfer(f,request)
+			d.addErrback(err).addCallback(cbFinished)
+			return NOT_DONE_YET
+		else:
+			return static.File.render(self,request)
 
 
 

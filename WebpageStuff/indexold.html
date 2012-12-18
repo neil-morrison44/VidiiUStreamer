@@ -1,0 +1,242 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+ <title>VidiiU Streamer</title>
+ <style type="text/css">
+ body{
+ 	background-color: #f0fbff;
+	 border-style:solid;
+	 border-width:20px;
+	 border-color:#0052ff;
+ }
+ #title{
+	 background-color:#0052ff;
+	 text-align:center;
+	 color:white;
+	 text-weight:bold;
+	 top:0;
+	 font-family:sans-serif;
+	 text-shadow:0px 1px 2px black;
+	 font-weight:100;
+	 position:absolute;
+	 width:100%;
+	 left:0;
+	 border-bottom-left-radius: 100em;
+	 border-bottom-right-radius: 100em;
+	 box-shadow:0px 5px 0px 4px yellow, 0px 13px 3px 2px gray;
+ }
+ #donate{
+	 width:25%;
+	 height:60%;
+	 min-width:20px;
+	 border-style:dashed;
+	 border-color:rgba(255,255,255,0.8);
+	 padding:0.2em;
+	 position:absolute;
+	 right:10%;
+	 text-align:left;
+	 top:12%;
+	 background-color: rgba(166,41,41,0.4);
+	 min-width:250px;
+ }
+ #donate #paypalbut{
+	 text-align:center;
+	 padding-top:0.2em;
+ }
+ #downloads{
+	 position:absolute;
+	 min-width:200px;
+	 width:30%;
+	 min-height:400px;
+	 right:1em;
+	 top:60%;
+	 border-style:dashed;
+	 border-color:gray;
+	 background-color: rgba(226,226,226,0.58);
+ }
+  #about{
+	 position:absolute;
+	 min-width:400px;
+	 width:60%;
+	 min-height:400px;
+	 left:1em;
+	 top:60%;
+	 background-color: rgba(226,226,226,0.58);
+ }
+ p{
+ 	position:relative;
+ 	left:1.7em;
+ 	width:90%;
+ }
+ .dOption{
+	 height:100%;
+	 min-height:95px;
+	 margin-top:1em;
+	 position:relative;
+	 width:100%;
+	 color:black;
+	 text-decoration:none;
+	 top:20%;
+	 border-style:solid;
+	 border-left:none;
+	 border-right:none;
+	 border-color:gray;
+	 background-color: rgba(226,226,226,0.90);
+	 cursor:pointer;
+ }
+ .dOption:hover{
+	 background-color: rgba(200,200,226,0.90);
+ }
+ #downloads a{
+	 text-decoration: none;
+ }
+ 
+ .dOption .link{
+ 	position:absolute;
+	bottom:0.5em;
+	left:0.5em;
+	text-decoration: underline;
+	color:blue;
+ }
+ .icon{
+	 background-image:url('WinMacGitLogo.png');
+	 width:50px;
+	 height:50px;
+	 background-size:150px 50px;
+	 margin-left:0.5em;
+	 position:relative;
+	 float:left;
+	 top:0em;
+	 border-style:solid;
+	 border-color:rgba(127,127,127,0.66);
+	 background-repeat: no-repeat;
+ }
+ #windowsIcon{
+	 background-position: 0px 0px;
+	 
+
+ }
+ #macIcon{
+	 background-position: -51px -2px;
+
+ }
+ #gitIcon{
+	 background-position: -100px 0px;
+
+ }
+ #screenshots{
+	 height:38%;
+	 overflow-y:hidden;
+	 overflow-x:scroll;
+	 width:90%;
+	 top:16%;
+	 position:absolute;
+	 padding:1em;
+	 background:rgba(214,214,214,0.84);
+	 box-shadow: inset 0px 10px 11px 8px #70d2ff,0px 0px 11px 8px #70d2ff;
+ }
+  #screenshots #backing{
+	 height:100%;
+	 width:160%;
+	 margin-left:1em;
+	 bacfkground:rgba(214,214,214,0.84);
+ }
+ #screenshots img{
+	 display:inline;
+	 height:90%;
+	 width:auto;
+	 margin-left:1em;
+	 box-shadow:0px 10px 11px 8px rgba(0,0,0,0.47);
+ }
+ #footer{
+	 position:absolute;
+	 top:140%;
+	 height:5%;
+ }
+ </style>
+ <script type="text/javascript">
+ </script>
+ 
+ <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37039797-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+ 
+ </head>
+ <body>
+ <div id="container">
+ 
+ <div id="title">
+ <H1>VidiiU Streamer</H1>
+ <div id="donate">Donate to Support Development:<div id="paypalbut"><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal — The safer, easier way to pay online.">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+</form>
+</div>
+</div>
+ </div>
+ <div id="screenshots">
+ 	<div id="backing">
+	 <img src="screenshots/1.JPG"><img src="screenshots/2.JPG"><img src="screenshots/3.JPG">
+ 	</div>
+ </div>
+ 
+ <section id="about">
+ <H2>About</H2>
+ <p>VidiiU Streamer turns your computer into a server ready to stream all your videos over to your WiiU.</p>
+ <p>On the WiiU videos are presented in a easy to navigate list.</p>
+ <H2>Current Features</H2>
+ <ul>
+ <li>Play your mp4 videos on the WiiU.</li>
+ <li>Sorts videos of the form <i>Show.Name.S01E01...</i> together into shows with different sections for each season</li>
+ <li>Every episode has its own Thumbnail</li>
+ <li>Videos downloaded in the last 2 days have a 'new' tag</li>
+ </ul>
+ <H2>Future Features</H2>
+ <ul>
+ <li>Support for Transcoding (turning videos that aren't playable on the WiiU into videos that are)</li>
+ <li>Improved GUI, the current one is quite...lacking. (Also options like port config, file names ect)</li>
+ </ul>
+ <H2>Contact Me</H2>
+ <p>If you run into any problems contact me at either <a href="http://twitter.com/VidiiUSupport"><b>@VidiiUSupport</b> on twitter</a> or <a href="mailto:support@vidiiustreamer.com">email <b>support@vidiiustreamer.com</b></a>
+ </section>
+
+ <div id="downloads">
+ 	<a href="/download_0.8_Win.zip" onlcick="_gaq.push(['_trackEvent', 'Downloads', 'Win']);">
+	 <div id="windows" class="dOption">
+		 <div id="windowsIcon" class="icon"></div>
+		 <H3>Download for Windows</H3>
+		 <div class="link">/download_0.8_Win.zip</div>
+	 </div>
+	 </a>
+	 <a href="download_0.8_Mac.zip" onclick="_gaq.push(['_trackEvent', 'Downloads', 'Mac']);">
+	 <div id="mac" class="dOption">
+		 <div id="macIcon" class="icon"></div>
+		 <H3>Download for Mac</H3>
+		 <div class="link">/download_0.8_Mac.zip</div>
+	 </div>
+	 </a>
+	 <a href="https://github.com/neil-morrison44/VidiiUStreamer" onclick="_gaq.push(['_trackEvent', 'Downloads', 'Git']);">
+	 <div id="github" class="dOption">
+		 <div id="gitIcon" class="icon"></div>
+		 <H3>Browse Source at GitHub</H3>
+		 <div class="link">github.com/neil-morrison44/VidiiUStreamer</div>
+	 </div>
+	 </a>
+ </div>
+ </div>
+ <div id="footer"> </div>
+ </body>
+ </html>

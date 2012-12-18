@@ -5,9 +5,6 @@
  <style type="text/css">
  body{
  	background-color: #f0fbff;
-	 border-style:solid;
-	 border-width:20px;
-	 border-color:#0052ff;
  }
  #title{
 	 background-color:#0052ff;
@@ -44,24 +41,23 @@
 	 padding-top:0.2em;
  }
  #downloads{
-	 position:absolute;
 	 min-width:200px;
 	 width:30%;
 	 min-height:400px;
-	 right:1em;
-	 top:60%;
+	 max-height:600px;
+	 float:right;
 	 border-style:dashed;
 	 border-color:gray;
-	 background-color: rgba(226,226,226,0.58);
+	 background-color: rgba(226,226,226,0.70);
  }
   #about{
-	 position:absolute;
+  	 float:left;
 	 min-width:400px;
 	 width:60%;
 	 min-height:400px;
-	 left:1em;
-	 top:60%;
+	 padding-left:0.2em;
 	 background-color: rgba(226,226,226,0.58);
+	 box-shadow: 0px 0px 6px rgba(226,226,226,0.58);
  }
  p{
  	position:relative;
@@ -70,7 +66,8 @@
  }
  .dOption{
 	 height:100%;
-	 min-height:95px;
+	 min-height:105px;
+	 max-height:120px;
 	 margin-top:1em;
 	 position:relative;
 	 width:100%;
@@ -83,6 +80,7 @@
 	 border-color:gray;
 	 background-color: rgba(226,226,226,0.90);
 	 cursor:pointer;
+	 box-shadow:inset 0px 1px 6px 0px black;
  }
  .dOption:hover{
 	 background-color: rgba(200,200,226,0.90);
@@ -98,6 +96,11 @@
 	text-decoration: underline;
 	color:blue;
  }
+ .dOption Hf3{
+	 position:relative;
+	 left:0.5em;
+	 width:95%;
+ }
  .icon{
 	 background-image:url('WinMacGitLogo.png');
 	 width:50px;
@@ -107,8 +110,9 @@
 	 position:relative;
 	 float:left;
 	 top:0em;
-	 border-style:solid;
+	 border-style:none;
 	 border-color:rgba(127,127,127,0.66);
+	 box-shadow:0px 3px 7px rgba(0,0,0,0.51), inset 0px 3px 7px rgba(0,0,0,0.51);
 	 background-repeat: no-repeat;
  }
  #windowsIcon{
@@ -129,30 +133,82 @@
 	 overflow-y:hidden;
 	 overflow-x:scroll;
 	 width:90%;
-	 top:16%;
-	 position:absolute;
+	 margin-left:auto;
+	 margin-right:auto;
+	 margin-top:5em;
 	 padding:1em;
-	 background:rgba(214,214,214,0.84);
+	 background:rgba(167,204,224,0.84);
 	 box-shadow: inset 0px 10px 11px 8px #70d2ff,0px 0px 11px 8px #70d2ff;
  }
   #screenshots #backing{
 	 height:100%;
-	 width:160%;
+	 width:110%;
 	 margin-left:1em;
-	 bacfkground:rgba(214,214,214,0.84);
+	 min-width:1268px;
  }
  #screenshots img{
 	 display:inline;
-	 height:90%;
-	 width:auto;
+	 height:250px;
+	 width:390px;
 	 margin-left:1em;
 	 box-shadow:0px 10px 11px 8px rgba(0,0,0,0.47);
  }
  #footer{
 	 position:absolute;
-	 top:140%;
-	 height:5%;
+	 top:130%;
+	 height:2em;
+	 opacity:0.1;
  }
+ #infolinks{
+	 min-width:800px;
+	 width:80%;
+	 margin-left:auto;
+	 margin-right:auto;
+	 position:relative;
+	 padding-top:1em;
+	 padding-bottom:4em;
+	 overflow:hidden;
+ }
+ 
+ ::-webkit-scrollbar {
+    height:8px;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,50,0.1); 
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color:rgba(130,217,239,0.45);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,100,0.5); 
+}
+
+@media all and (max-width:950px){
+	#title{
+		min-height:140px;
+		max-height:165px;
+		border-bottom-left-radius: 50em;
+		border-bottom-right-radius: 50em;
+	}
+	#donate{
+		position:relative;
+		left:0em;
+		top:-1.5em;
+		margin-left:auto;
+		margin-right:auto;
+		max-height:50px;
+	}
+	#screenshots{
+		margin-top:11em;
+	}
+
+	#infolinks{
+		min-height:1200px;
+	}
+}
  </style>
  <script type="text/javascript">
  </script>
@@ -173,9 +229,8 @@
  
  </head>
  <body>
- <div id="container">
  
- <div id="title">
+  <div id="title">
  <H1>VidiiU Streamer</H1>
  <div id="donate">Donate to Support Development:<div id="paypalbut"><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -187,11 +242,20 @@
 </div>
 </div>
  </div>
+ 
  <div id="screenshots">
  	<div id="backing">
 	 <img src="screenshots/1.JPG"><img src="screenshots/2.JPG"><img src="screenshots/3.JPG">
  	</div>
+ 	<script type="text/javascript">
+	 	document.getElementById('screenshots').scrollLeft = 216;
+	</script>
  </div>
+ 
+ <div id="infolinks">
+ 
+
+
  
  <section id="about">
  <H2>About</H2>
@@ -208,6 +272,7 @@
  <ul>
  <li>Support for Transcoding (turning videos that aren't playable on the WiiU into videos that are)</li>
  <li>Improved GUI, the current one is quite...lacking. (Also options like port config, file names ect)</li>
+ <li>Check the GitHub page for a full project Roadmap</li>
  </ul>
  <H2>Contact Me</H2>
  <p>If you run into any problems contact me at either <a href="http://twitter.com/VidiiUSupport"><b>@VidiiUSupport</b> on twitter</a> or <a href="mailto:support@vidiiustreamer.com">email <b>support@vidiiustreamer.com</b></a>
@@ -221,7 +286,7 @@
 		 <div class="link">/download_0.8_Win.zip</div>
 	 </div>
 	 </a>
-	 <a href="download_0.8_Mac.zip" onclick="_gaq.push(['_trackEvent', 'Downloads', 'Win']);">
+	 <a href="download_0.8_Mac.zip" onclick="_gaq.push(['_trackEvent', 'Downloads', 'Mac']);">
 	 <div id="mac" class="dOption">
 		 <div id="macIcon" class="icon"></div>
 		 <H3>Download for Mac</H3>
@@ -237,6 +302,6 @@
 	 </a>
  </div>
  </div>
- <div id="footer"> </div>
+ <div id="footer">. </div>
  </body>
  </html>

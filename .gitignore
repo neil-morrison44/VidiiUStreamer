@@ -34,7 +34,10 @@ nosetests.xml
 .project
 .pydevproject
 
-
+# User specific files
+images/
+tmp/
+.m3u8
 
 #Mac DS_Store
 .DS_Store
