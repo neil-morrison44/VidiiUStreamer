@@ -64,41 +64,67 @@ once = True
 	
 class TransCodingFile(static.File):
 	isLeaf = True;
+	converter = ffmpegHandler.Converter();
 	def render(self,request):
-		global once
+		self.isLeaf = False
 		#print request
 		#print dir(request)
 		print request.path
+		
 		if (request.path.split('.')[-1] == 'mkv'):
-			print once
+		
 			print request.path.split('.')[-1]
 			request.setHeader('Content-Type',"application/x-mpegurl")
-			if (once):
-				ffmpegHandler.convert('../../Torrents',request.path)
-				once = False
-			f = open('playlist.m3u8','rb')
-			def cbFinished(ignored):
-					f.close()
-					request.finish()
 			
-			d = FileSender().beginFileTransfer(f,request)
-			d.addErrback(err).addCallback(cbFinished)
+			if (self.converter.checkStatus(request.path)):
+				self.converter.start('../../Torrents',request.path)
+				
+			#f = open('playlist.m3u8','rb')
+			#print f.read()
+			#f.close()
+			#f = open('playlist.m3u8','rb')
+			#def cbFinished(ignored):
+			#f.close()
+			#request.finish()
+			playlist = self.converter.getPlaylist()
+			print playlist
+			return playlist
 			
-			return NOT_DONE_YET
+			#d = FileSender().beginFileTransfer(f,request)
+			#d.addErrback(err).addCallback(cbFinished)
+			
+			#return NOT_DONE_YET
+			
 		elif(request.path.split('.')[-1] == 'ts'):
-			print ('tsin\' with the best of them')
+		
 			request.setHeader('Content-Type','video/MP2T')
 			print (request.path + '<--------')
+			self.converter.updateRecentSeg(request.path)
 			f = open(request.path[1:],'rb')
+			
 			def cbFinished(ignored):
-					f.close()
-					request.finish()
+				f.close()
+				request.finish()
 			
 			d = FileSender().beginFileTransfer(f,request)
 			d.addErrback(err).addCallback(cbFinished)
 			return NOT_DONE_YET
+			
 		else:
+		
+			print ('travelled well')
+			print self.path
+			request.setHeader('Content-Type','video/octet-stream')
+			self.isLeaf = False
 			return static.File.render(self,request)
+			"""f = open(self.path+request.path,'rb')
+			def cbFinished(ignored):
+				f.close()
+				request.finish()
+		
+			d = FileSender().beginFileTransfer(f,request)
+			d.addErrback(err).addCallback(cbFinished)
+			return NOT_DONE_YET"""
 
 
 

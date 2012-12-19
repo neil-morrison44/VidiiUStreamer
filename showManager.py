@@ -130,11 +130,11 @@ class showStore():
 			d = detailPlucker(moviefile)
 			thisEpisode = episode()
 			thisEpisode.setDetails(d['episode'],d['show'],d['season'],d['filetype'],moviefile)
-			thisEpisode.osdate = os.path.getctime(path+'/'+moviefile);
+			thisEpisode.osdate = os.path.getctime(self.path+'/'+moviefile);
 			##print details['show']
 			showname = str.upper(d['show'])
 			
-			queue.put({'path':path,'mv':moviefile})
+			queue.put({'path':self.path,'mv':moviefile})
 			
 			if showname not in self.store:
 				self.store[showname] = show()
