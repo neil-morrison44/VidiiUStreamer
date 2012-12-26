@@ -3,138 +3,126 @@
  <head>
  <title>VidiiU</title>
  <style type="text/css">
- body{
-	 background-color:rgba(188,188,193,1);
- }
- .show{
- 	 position:relative;
-	 border-radius:1em;
-	 background-color:rgba(250,250,255,0.8);
-	 padding:1em;
-	 padding-top:0.2em;
-	 margin-top:2em;
- }
- .showname{
-	 border-bottom-style: solid;
-	 border-colour: rgb(200,200,200);
-	 text-shadow:0px 0px 12px #3f99e8;
-	 color:#262626;
-	 border-color:#262626;
-	 text-weight:bold;
- }
- .showname:before{
-	 content: "";
-	 position:absolute;
-	 height:2px;
-	 top:2em;
-	 min-width:60%;
-	 width:95%;
-	 box-shadow:0px 0px 12px #3f99e8;
- }
- .videobox{
- 	 overflow:hidden;
- 	 position:relative;
-	 border-color:#c2c2c2;
-	 border-style:solid;
-	 width:90%;
-	 margin-right:auto;
-	 margin-left:auto;
-	 min-height:120px;
-	 margin-top:1em;
-	 border-radius:0.5em;
-	 background-image:-webkit-linear-gradient(#ffffff 0%, #dedede 100%);
-	 box-shadow:0px 8px 7px rgba(0,0,0,0.33);
-	 -webkit-transition: box-shadow 1s;
- }
- .videobox:hover{
-	 box-shadow:0px 8px 13px rgba(20,50,180,0.66);
-	 -webkit-transition: box-shadow 1s;
- }
- .new:after{
- 	 position:absolute;
-	 content:"new";
-	 background-image :-webkit-linear-gradient(#568afb 0%, #2732d2 100%);
-	 color:white;
-	 font-family:sans-serif;
-	 -webkit-transform: rotate(35deg); 
-	 transform:rotate(35deg);
-	 padding:2em;
-	 padding-top:0.1em;
-	 padding-bottom:0.1em;
-	 top:0.5em;
-	 right:-1.2em;
-	 box-shadow:-5px 7px 13px rgba(159,165,176,0.2);
- }
- .red{
-	 background-image:-webkit-linear-gradient(#ffc7c7 0%, #e2a8a8 100%);
-	 border-color:#b07c7c;
- }
- .leftcol,.rightcol{
-	 width:50%;
-	 position:relative;
-	 border-style:solid;
-	 border-color:rgba(0,0,0,0);
-	 display:block;
-	 background-color: rgba(240,240,240,1);
-	 padding-top:4em;
-	 padding-bottom:2em;
- }
- .rightcol{
- 	position:absolute;
- 	top:0;
-	left:50%;
-	padding-bottom:0em;
-	
- }
- .cols{
-	 position:relative;
-	 width:100%;
- }
- .posterimg{
-	 padding:0.5em;
-	 max-width:40%;
-	 -webkit-border-top-left-radius:0.5em;
-	 -webkit-border-bottom-left-radius:0.5em;
- }
- .videobox:before{
- 	position:absolute;
- 	top:0.7em;
- 	left:0.7em;
- 	width:39%;
- 	height:82%;
- 	content:" ";
- 	z-index:100;
- 	background-size:contain;
- 	background-repeat:no-repeat;
- 	opacity:1;
- 	background-image: url('Selector.png');
- }
- .title{
- 	position:absolute;
- 	top:-0.6em;
- 	left:45%;
- 	word-break: break-all;
- 	word-wrap: break-word;
-	display:block;
- }
- .date{
-	position:absolute;
- 	bottom:-0.4em;
- 	left:45%;
-	display:block; 
- }
- .season{
-	 position:absolute;
-	 top:-1em;
-	 left:1em;
-	 width:95%;
-	 margin-top:1.5em;
-	 color:gray;
-	 text-shadow:0px 1px 1px #bababa;
-	 border-bottom-style:solid;
-	 border-color:gray;
-	 z-index:20;
- }
+ body {
+     background: #FAFAFA;
+     font-family: sans-serif;
+}
+
+.show {
+     background-color: rgba(250, 250, 255, 0.8);
+     border-radius: 1em 1em 1em 1em;
+     margin-top: 2em;
+     padding: 0.2em 1em 1em;
+     position: relative;
+}
+
+.showname {
+     border-bottom: 1px solid #262626;
+     border-color: #262626;
+     color: #262626;
+}
+
+.showname:before {
+     content: "";
+     height: 2px;
+     min-width: 60%;
+     position: absolute;
+     top: 2em;
+     width: 95%;
+}
+
+.videobox {
+     background: #FFFFFF;
+     border-color: #C2C2C2;
+     border-radius: 0.5em 0.5em 0.5em 0.5em;
+     border-style: solid;
+     border-width: 1px;
+     box-shadow: -1px -1px 6px rgba(0, 0, 0, 0.2) inset;
+     cursor: pointer;
+     margin-bottom: 1em;
+     min-height: 120px;
+     overflow: hidden;
+     padding: 0.5em 1em;
+     position: relative;
+     width: 90%;
+}
+
+.videobox:hover {
+     box-shadow: 0px 8px 13px rgba(20, 50, 180, 0.66);
+}
+
+.new:after {
+     box-shadow: -5px 7px 13px rgba(159, 165, 176, 0.2);
+     color: white;
+     content: "new";
+     font-family: sans-serif;
+     padding: 0.1em 2em;
+     position: absolute;
+     right: -1.2em;
+     top: 0.5em;
+     transform: rotate(35deg);
+}
+
+.red {
+     border-color: #B07C7C;
+}
+
+.leftcol, .rightcol {
+     background-color: rgba(255, 255, 255, 0.2);
+     border-color: transparent;
+     border-style: solid;
+     display: inline-block;
+     padding-bottom: 2em;
+     position: relative;
+     vertical-align: top;
+     width: 49%;
+}
+
+.rightcol {
+    
+}
+
+.cols {
+     position: relative;
+     width: 100%;
+}
+
+.posterimg {
+     float: left;
+     margin-right: 2%;
+     max-width: 40%;
+}
+
+.videobox:before {
+     background-image: url("Selector.png");
+     background-repeat: no-repeat;
+     background-size: contain;
+     content: " ";
+     height: 82%;
+     left: 0.7em;
+     opacity: 1;
+     position: absolute;
+     top: 0.7em;
+     width: 39%;
+     z-index: 100;
+}
+
+.title {
+     word-break: break-all;
+     word-wrap: break-word;
+}
+
+.date {
+     bottom: -0.4em;
+     display: block;
+     left: 45%;
+     position: absolute;
+}
+
+.season {
+     color: gray;
+}
+
  </style>
  <script type="text/javascript">
  function getVideo(videoName){
