@@ -154,8 +154,9 @@ class showStore():
 		return self.store.name
 	
 	def getFileList(self,path):
+		#when given a path return an array of all videos within said path
 		filelist = os.listdir(path)
-		return [file for file in filelist if (file.split('.')[-1] == 'mp4' or file.split('.')[-1] == 'mkv')]
+		return [file for file in filelist if (file.split('.')[-1].lower() in ['mp4','mkv','avi','wmv','mov','mpg','3gp','flv','m4v','m2v','mpeg','ogg']]
 		
 
 def detailPlucker(episodeString):
@@ -186,3 +187,5 @@ def detailPlucker(episodeString):
 	##print show
 	return {'show':show,'season':season,'episode':episode,'filetype':filetype}
 
+def getAddressForShow(requestPath):
+	

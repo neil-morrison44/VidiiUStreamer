@@ -104,10 +104,11 @@ class TransCodingFile(static.File):
 		self.isLeaf = False
 		print request
 		if (fileType(request.path) in ['mkv','avi','wmv','mov','mpg','3gp','flv','m4v','m2v','mpeg','ogg'] or ('trans' in request.args and request.args['trans'][0] == 'True')):
-		
-			request.setHeader('Content-Type',"application/x-mpegurl")	
+			#if the video is of the kind to get transcoded or transcoding has been requested
+			request.setHeader('Content-Type',"application/x-mpegurl")
+				
 			if (self.converter.checkStatus(request.path)):
-				self.converter.start('../../Torrents',request.path)
+				self.converter.start(self.path,request.path)
 				
 			playlist = self.converter.getPlaylist()
 			print playlist

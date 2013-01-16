@@ -94,3 +94,10 @@ class template():
 		return [right,left]
 	
 	
+class filmTemplate():
+	FileAddress = 'films.html'
+	templateFile = open(FileAddress)
+	templateString = templateFile.read()
+	def updateTemplate(self):
+		self.templateString = open(self.FileAddress).read()
+	
