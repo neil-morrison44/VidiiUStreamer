@@ -30,19 +30,21 @@ class show():
 class episode():
 	number = 0
 	name = ""
+	fullpath = ""
 	season = 0
 	osdate = 0
 	misc = False
 	image = ""
 	fileformat = ""
 	filename = ""
-	def setDetails(self,number,name,season,ff,fn):
+	def setDetails(self,number,name,season,ff,fn,path):
 		self.number = number
 		self.name = name
 		self.season = season
 		self.osdate = 0
 		self.fileformat = ff
 		self.filename = fn
+		self.fullpath = path
 	def __unicode__(self):
 		return ""
 		
@@ -97,8 +99,8 @@ class showStore():
 			#print moviefile
 			d = detailPlucker(moviefile)
 			thisEpisode = episode()
-			thisEpisode.setDetails(d['episode'],d['show'],d['season'],d['filetype'],moviefile)
-			thisEpisode.osdate = os.path.getctime(path+'/'+moviefile);
+			thisEpisode.setDetails(d['episode'],d['show'],d['season'],d['filetype'],moviefile,os.path.join(self.path,moviefile))
+			thisEpisode.osdate = os.path.getctime(os.path.join(self.path,moviefile))
 			##print details['show']
 			showname = str.upper(str(d['show']))
 			
@@ -129,8 +131,8 @@ class showStore():
 			#print moviefile
 			d = detailPlucker(moviefile)
 			thisEpisode = episode()
-			thisEpisode.setDetails(d['episode'],d['show'],d['season'],d['filetype'],moviefile)
-			thisEpisode.osdate = os.path.getctime(self.path+'/'+moviefile);
+			thisEpisode.setDetails(d['episode'],d['show'],d['season'],d['filetype'],moviefile,os.path.join(self.path,moviefile))
+			thisEpisode.osdate = os.path.getctime(os.path.join(self.path,moviefile))
 			##print details['show']
 			showname = str.upper(d['show'])
 			
@@ -157,6 +159,9 @@ class showStore():
 		
 
 def detailPlucker(episodeString):
+	#Supports SHOW s01e01 ect
+	
+	#Support SHOW - SEE - TITLE
 	show = ""
 	episode = 0
 	season = 0

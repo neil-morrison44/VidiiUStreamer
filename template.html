@@ -137,11 +137,39 @@
  }
  </style>
  <script type="text/javascript">
- function getVideo(videoName){
+ function sendPOST(data){
+     xmlhttp = new XMLHttpRequest();
+	 xmlhttp.open("POST","",true);
+	 xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	 xmlhttp.send(data);
+ }
+ function getVideo(videoName,transcode){
  	 var goHere = window.location + videoName;
+ 	 if (transcode){
+	 	 goHere += '?trans=True'
+ 	 }
  	 goHere = goHere.replace('8000','8800');
  	 
-	 window.location = goHere;
+	 //window.location = goHere;
+	 
+	 var video = document.createElement('video');
+	 video.src = goHere;
+	 if (true){
+	 	if (video.wiiu_videoplayer_end){
+		 alert('yip');	
+	 	}
+	 	video.addEventListener(wiiu_videoplayer_end,videoended,false);
+	 	}
+	 video.play();
+	 if (video.webkitRequestFullscreen) {
+	 	video.webkitRequestFullscreen();}
+ }
+ function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+ }
+ function videoended(){
+	 alert('hi');
+	 sendPOST('{"end":"True"}');
  }
  </script>
  
@@ -150,32 +178,7 @@
  
  [[dunstable]]
  
-<div id="futuramaSection" class="show">
- <h1 class="showname">Futurama</h1>
- <div class="cols"><H2 class="season">Season 08</H2>
- <div class="rightcol">
  
 
- 
- 
- 
- </div>
- 
- <div class="leftcol">
- 
-
-<!-- <div id="video1" class="videobox">
- <img class="posterimg" src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/A_Square_IMG_4839.JPG/320px-A_Square_IMG_4839.JPG"></img> 
- <h3 class="title">Episode 4</h3>
- <h4 class="date">30th November 2012</h4>
- </div>
-	 
- </div>
- 
- </div>
- </div>
-
- 
- -->
  </body>
  </html>

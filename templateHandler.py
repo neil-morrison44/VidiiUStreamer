@@ -4,7 +4,9 @@ class template():
 	FileAddress = 'template.html'
 	templateFile = open(FileAddress)
 	templateString = templateFile.read()
-
+	def updateTemplate(self):
+		self.templateString = open(self.FileAddress).read()
+	
 	def getVideoBox(self,episode):
 		classes = ""
 		filename = episode.filename
@@ -20,15 +22,17 @@ class template():
 			title = "Episode %02d"%(number)
 		if ((time.mktime(time.gmtime()) - date) < 172800):
 			classes += " new"
+		transcode = 'false'
 		if (episode.fileformat != 'mp4'):
 			##print episode.fileformat
 			classes += " red"
+			transcode = 'true'
 			
-		return r"""<div id="%s" class="videobox %s" onclick="getVideo('%s')">
+		return r"""<div id="%s" class="videobox %s" onclick="getVideo('%s',%s)">
  <img class="posterimg" src="%s"></img> 
  <h3 class="title">%s</h3>
  <h4 class="date">%s</h4>
- </div>"""%(filename,classes,filename,image,title,time.ctime(date))
+ </div>"""%(filename,classes,filename,transcode,image,title,time.ctime(date))
 
 	def getSeason(self,show,season):
 		episodes = show.getEpisodesForSeason(season)
@@ -68,6 +72,7 @@ class template():
 		
 	#used to start filling the template, will call getShow()	
 	def fillTemplate(self,store):
+		self.updateTemplate()
 		showsString = ""
 		sortedkeys = sorted(store.keys())
 		for show in sortedkeys:

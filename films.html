@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Movies</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<style type="text/css">
+body{
+	background: -webkit-linear-gradient(#303030 0%, #525252 100%);
+}
+#films{
+	width:974px;
+	margin-left:3px;
+	margin-right:3px;
+	border-style:dashed;
+	border-spacing: 10em;
+	border-width:thick;
+	border-top-style:none;
+	border-bottom-style:none;
+	border-color:white;
+	position: absolute;
+	z-index:-2;
+	top:0;
+	left:0;
+	-webkit-box-sizing: border-box;
+}
+.filmbox{
+	border-style:solid;
+	border-color:#747474;
+	width:900px;
+	height:415px;
+	border-radius:15px;
+	padding:15px;
+	padding-top:0px;
+	text-align:center;
+	position:relative;
+	overflow:hidden;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:10px;
+}
+.filmbox:before{
+	content:" ";
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	background-color:white;
+	-webkit-filter:saturate(150%) blur(8px);
+	background-image:url(tse.jpg);
+	background-size:100% 100%;
+	z-index:-1;
+	overflow:hidden;
+}
+
+.filmbox > .title{
+	margin-left:auto;
+	margin-right:auto;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:2.5em;
+	font-weight:bolder;
+	background:rgba(255,255,255,0.80);
+	border-radius:15px;
+	border-top-left-radius:0px;
+	border-top-right-radius:0px;
+}
+.filmbox > .posterImg{
+	float:left;
+	position:relative;
+	top:-2.9em;
+	padding:5px;
+	-webkit-transform-origin: 50% -25%;
+	-webkit-transform: perspective(500px) rotateY(10deg);
+}
+
+.filmbox > .score{
+	color:rgb(80,106,22);
+	font-weight:bolder;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:large;
+	margin-top:50px;
+	text-align:left;
+	
+	background:rgba(255,255,255,0.49);
+	border-radius:15px;
+}
+.filmbox > .runtime{
+	font-family: Arial, Helvetica, sans-serif;
+	text-align:left;
+	font-size:large;
+	margin-top:10px;
+	
+	background:rgba(255,255,255,0.49);
+	border-radius:15px;
+}
+.filmbox > .releaseDate{
+	font-family: Arial, Helvetica, sans-serif;
+	margin-top:10px;
+	text-align:left;
+	font-size:large;
+	
+	background:rgba(255,255,255,0.49);
+	border-radius:15px;
+	text-decoration: underline;
+}
+.filmbox > .MPAA{
+	font-family: Arial, Helvetica, sans-serif;
+	margin-top:10px;
+	text-align:left;
+	content:attr(class);
+	
+}
+.filmbox > .G{
+	content:url(http://upload.wikimedia.org/wikipedia/commons/0/05/RATED_G.svg);
+	height:40px;
+}
+.filmbox > .PG{
+	content:url(http://upload.wikimedia.org/wikipedia/commons/b/bc/RATED_PG.svg);
+	height:40px;
+}
+.filmbox > .PG-13{
+	content:url(http://upload.wikimedia.org/wikipedia/commons/c/c0/RATED_PG-13.svg);
+	height:40px;
+}
+.filmbox > .R{
+	content:url(http://upload.wikimedia.org/wikipedia/commons/7/7e/RATED_R.svg);
+	height:40px;
+}
+.filmbox > .synopsis{
+	position:absolute;
+	bottom:0px;
+	right:10px;
+	left:10px;
+	background-color:rgba(255,255,255,0.80);
+	height:30%;
+	padding-top:10px;
+	border-top-right-radius:15px;
+	border-top-left-radius:15px;
+	font-size:large;
+	font-family: serif;
+	padding:20px;
+}
+</style>
+<script type="text/javascript">
+</script>
+
+</head>
+<body>
+<div id="films">
+	<div id="ToyStory" class="filmbox">
+		<div class="title">Toy Story</div>
+		<img class="posterImg" src="http://content7.flixster.com/movie/10/93/63/10936393_det.jpg" width=180 height=256>
+		<div class="score">100% - Certified Fresh</div>
+		<div class="runtime">80 minutes</div>
+		<div class="releaseDate">Released: 1995-11-22</div>
+		<div class="MPAA G"></div>
+		<div class="synopsis">
+		As entertaining as it is innovative, Toy Story kicked off Pixar's unprecedented run of quality pictures, reinvigorating animated film in the process.
+		</div>
+		
+	</div>
+		<div id="ToyStory" class="filmbox">
+		<div class="title">Toy Story</div>
+		<img class="posterImg" src="http://content7.flixster.com/movie/10/93/63/10936393_det.jpg" width=180 height=256>
+		<div class="score">100% - Certified Fresh</div>
+		<div class="runtime">80 minutes</div>
+		<div class="releaseDate">Released: 1995-11-22</div>
+		<div class="MPAA G"></div>
+		<div class="synopsis">
+		As entertaining as it is innovative, Toy Story kicked off Pixar's unprecedented run of quality pictures, reinvigorating animated film in the process.
+		</div>
+		
+	</div>
+</div>
+</body>
+</html>
