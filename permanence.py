@@ -1,6 +1,6 @@
 import urllib, os,json
 
-thisVersion = 0.8
+thisVersion = 1.0
 #manually changing this bit for the Mac/Windows builds...I know it's ugly but shuttup.
 thisPlatform = 'Mac'
 
@@ -42,10 +42,11 @@ class localStorage():
 			self.datadict[key] = newdict[key]
 		self.write()
 	def read(self,key):
+		print key + ' being read'
 		try:
 			return self.datadict[key]
 		except:
-			return " "*80
+			return []
 	def clear(self):
 		self.datadict = {}
 		open("config.txt",'w+').write("{}")

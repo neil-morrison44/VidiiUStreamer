@@ -1,28 +1,11 @@
 import subprocess,os
 import shlex
 import time
+import threading
 
 windows = False
 converter = None
-def convert(path,filename):
-	global converter
-	if (converter is not None):
-		converter.terminate()
-	print(path+filename)
-	cmd = "./ffmpeg -threads 4 -i inputfile -map 0 -codec:v libx264 -preset superfast -codec:a aac -ac 2 -crf 23 -flags -global_header -strict experimental -f segment -segment_list playlist.m3u8 -segment_list_flags +live -segment_time 10 tmp/out%03d.ts".replace('inputfile',path+filename)
-	
-
-	
-	#cmd = 'ls'
-	global windows
-	if windows:
-		cmd.replace('ffmpeg','ffmpeg.exe')
-	
-	cmd = shlex.split(cmd)
-	
-	print cmd
-	converter = subprocess.Popen(cmd)
-	time.sleep(10)
+shush = True
 
 class Converter():
 	qualities = ['ultrafast', 'superfast', 'veryfast', 'faster', 'fast', 'medium', 'slow', 'slower', 'veryslow']
@@ -33,15 +16,24 @@ class Converter():
 		self.converter = None
 		self.crf = 27 
 		self.recentSegment = ""
+		self.playlist = ""
+		self.plineCount = 0 
+		self.skipper = 0
+		self.timer = 0
+		self.checkingThread  = None
 		
-	def start(self,path,filename):
+	def start(self,filepath):
 		self.fullTerminate()
-		print(path+filename)
-		cmd = "./ffmpeg -i inputfile -map 0 -codec:v libx264 -preset quality -codec:a aac -ac 2 -crf constantRateFactor -flags -global_header -strict experimental -f segment -segment_list playlist.m3u8 -segment_list_flags +live -segment_time 10 tmp/out%03d.ts".replace('inputfile',path+filename).replace('quality',self.qualities[self.q]).replace('constantRateFactor',str(self.crf))
+		print(filepath + 'started new transcoding')
 		
-	
+		cmd = "./ffmpeg -i inputfile -map 0 -map -0:s -dn -codec:v libx264 -preset quality -profile:v high444 -codec:a aac -ac 2 -crf constantRateFactor -flags -global_header -strict experimental -f segment -segment_list playlist.m3u8 -segment_list_flags +live -segment_time 10 tmp/out%03d.ts".replace('inputfile',quoterise(filepath)).replace('quality',self.qualities[self.q]).replace('constantRateFactor',str(self.crf))
+		
+		self.checkingThread = minCheckThread(self)
+		self.checkingThread.daemon = True
+		self.checkingThread.start()
 		
 		#cmd = 'ls'
+		
 		global windows
 		if windows:
 			cmd.replace('ffmpeg','ffmpeg.exe')
@@ -49,15 +41,19 @@ class Converter():
 		cmd = shlex.split(cmd)
 		
 		print cmd
-		self.converter = subprocess.Popen(cmd)
-		self.convFile = filename
-		self.converting = True;
-		#sleep for a little while so the transcoding can get at leas the first segment done
-		sleeptime = 0
-		while (os.path.isfile('./tmp/out004.ts') == False):
-			time.sleep(2)
-			sleeptime+= 2
-		print ('slept for %d'%(sleeptime))
+		fh = open("NUL","w")
+		self.converter = subprocess.Popen(cmd,shell=False,stdout = fh, stderr = fh)
+		#self.converter = subprocess.Popen(cmd,shell=False)
+		
+		self.playlist = """#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-MEDIA-SEQUENCE:0
+#EXT-X-ALLOWCACHE:1
+#EXT-X-TARGETDURATION:10"""
+		self.plineCount = 0
+		self.convFile = filepath
+		self.converting = True
+
 		
 	def checkStatus(self,filename):
 		return (self.convFile != filename)
@@ -72,6 +68,12 @@ class Converter():
 			self.converter.terminate()
 			time.sleep(1)
 		self.recentSegment = ""
+		self.convFile = ""
+		self.playlist = ""
+		self.plineCount = 0
+		self.skipper = 0 
+		if os.path.isfile('./playlist.m3u8'):
+			os.unlink('./playlist.m3u8')
 		folder = './tmp'
 		for the_file in os.listdir(folder):
 			file_path = os.path.join(folder, the_file)
@@ -80,37 +82,99 @@ class Converter():
 					os.unlink(file_path)
 			except Exception, e:
 				print e
+		self.converting = False
 	
 	def updateRecentSeg(self,segPath):
 		self.recentSegment = segPath;
+		self.timer = time.mktime(time.gmtime())
 	
 	def getPlaylist(self):
-		playlist = ""
+		
 		passedPrevious = False
 		newCount = 0
 		#code to keep playlist files only 2 ahead of the most recently requested file
 		#seems to help adverting a bug that causes the WiiU to need to refresh
 		#also helps as the stream won't be too far from where we left it when you play again
-		with open('./playlist.m3u8','r') as f:
-			for line in f.readlines():
-				if (newCount < 4):
-					playlist += line
+		
+		
+		#to be changed to point to non-continuous buffering video at start
+		try:
+			copylines = []
+			with open('./playlist.m3u8','r') as f:
+				copylines = []
+				lineCount = 0
+				for line in f.readlines():
 					if (line == self.recentSegment):
-						#only do 4 more lines
+						#only do 2 more lines
 						passedPrevious = True;
-					if (passedPrevious):
-						newCount += 1
-					
-		return playlist
+					#the linecount > 6... in the next line skips the header + first two lines (to stop the speedup), change to 4 for speed up glitch
+					if ((newCount < 4) and (lineCount > 6+self.plineCount)):
+						copylines.append(line)
+						if (passedPrevious):
+							newCount += 1
+					lineCount +=1
+				#print copylines
+				if len(copylines) < 2:
+					raise Exception('Not enough segments')
+				else:
+					for line in copylines:
+						self.playlist += line
+						self.plineCount+=1
+						
+		except:
+			if (self.skipper == 0 and self.plineCount == 0):
+				#print ('IO Error, adding')
+				#self.playlist+="\n#EXTINF:7.674333,\nloading.ts\n#EXT-X-DISCONTINUITY\n\n"
+				self.playlist+="\n#EXTINF:5.500000,\nloading.ts\n#EXT-X-DISCONTINUITY\n\n"
+				
+				self.skipper = 2
+			self.skipper -=1
+		poll = self.converter.returncode
+		#print self.converter.poll()
+		
+		if (poll is not None and poll > 0):
+			print 'ffmpeg failed'
+			self.converting = False
+			self.fullTerminate()
+			return "failed"	
+		#print self.playlist				
+		return self.playlist
 	
 	
-# store last sent ts, when asked for new m3u8 give file up to last ts + next two (if they exist)
-#include dummy in all .m3u8 files
+class minCheckThread(threading.Thread):
+	daemon = True
+	#thread runner will use "emptyRuns" so it doesn't just run for ever - if the queue's empty for 220 times in a row it'll quit
+	def run(self):
+		#print 'checking thread running'
+		while (self.running):
+			time.sleep(6)
+			if (self.converter.timer < (time.mktime(time.gmtime())-60)):
+				#print 'full termination from Thread because %d < %d'%(self.converter.timer,(time.mktime(time.gmtime())-60))
+				self.converter.fullTerminate()
+			#else:
+			#print 'no termination from Thread because %d > %d'%(self.converter.timer,(time.mktime(time.gmtime())-60))
+			if (self.converter.converting == False):
+				#print 'the converter ain\'t running so i ain\'t too' 
+				self.running = False
+			
+		
+	def __init__(self, converter):
+		#print "thread started"
+		threading.Thread.__init__(self)
+		self.converter = converter
+		self.running = True
+		
+def quoterise(s): 
+	return '"'+s+'"'
 
 def getFrame(filepath,outputname):
 	if not (os.path.exists(outputname+'.png')):
-		cmd = "./ffmpeg -i %s -ss 00:02:30 -f image2 -vframes 1 -s \"160x120\" %s.png"%(filepath,outputname)
+		cmd = "./ffmpeg -ss 00:02:30 -i %s -f image2 -vframes 1 -s \"160x120\" %s.png"%(quoterise(filepath),quoterise(outputname))
 		global windows
 		if windows:
 			cmd.replace('ffmpeg','ffmpeg.exe')
-		subprocess.call(shlex.split(cmd))
+			
+		fh = open("NUL","w")	
+		subprocess.call(shlex.split(cmd),shell=False,stdout = fh, stderr = fh)
+		#subprocess.call(shlex.split(cmd),shell=False)
+		fh.close()

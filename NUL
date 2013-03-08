@@ -1,0 +1,12 @@
+ffmpeg version 1.0.1-tessus Copyright (c) 2000-2012 the FFmpeg developers
+  built on Dec  3 2012 23:31:08 with llvm-gcc 4.2.1 (LLVM build 2336.1.00)
+  configuration: --prefix=/Users/tessus/data/ext/ffmpeg/sw --as=yasm --extra-version=tessus --disable-shared --enable-static --disable-ffplay --disable-ffserver --enable-gpl --enable-pthreads --enable-postproc --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-libspeex --enable-bzlib --enable-zlib --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libxavs --enable-version3 --enable-libvo-aacenc --enable-libvo-amrwbenc --enable-libvpx --enable-libgsm --enable-libopus --enable-fontconfig --enable-libfreetype --enable-libass --enable-filters --enable-runtime-cpudetect
+  libavutil      51. 73.101 / 51. 73.101
+  libavcodec     54. 59.100 / 54. 59.100
+  libavformat    54. 29.104 / 54. 29.104
+  libavdevice    54.  2.101 / 54.  2.101
+  libavfilter     3. 17.100 /  3. 17.100
+  libswscale      2.  1.101 /  2.  1.101
+  libswresample   0. 15.100 /  0. 15.100
+  libpostproc    52.  0.100 / 52.  0.100
+/Volumes/Monolith/Old Torrents/Old 04.11.11/The.Adventures.of.Buckaroo.Banzai.(1984).avi: Is a directory

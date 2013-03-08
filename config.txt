@@ -1,1 +1,1 @@
-{"path": "/Users/neil/Torrents", "FirstRun": 0}
+{"paths": [], "settings": {"quality": 0, "crf": 26, "sub": 1}, "subfolder": 1}
