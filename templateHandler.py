@@ -29,12 +29,12 @@ class template():
 			##print episode.fileformat
 			classes += " trans"
 			transcode = 'true'
-			
 		return r"""<div id="%s" class="videobox %s" onclick="getVideo('%s',%s)">
  <img class="posterimg" src="%s"></img> 
  <h3 class="title">%s</h3>
  <h4 class="date">%s</h4>
  </div>"""%(filename,classes,filename,transcode,image,title,time.ctime(date))
+
 
 	def getSeason(self,show,season):
 		episodes = show.getEpisodesForSeason(season)
