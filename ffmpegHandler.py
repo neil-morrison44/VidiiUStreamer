@@ -26,7 +26,7 @@ class Converter():
 		self.fullTerminate()
 		print(filepath + 'started new transcoding')
 		
-		cmd = "./ffmpeg -i inputfile -map 0 -map -0:s -dn -codec:v libx264 -preset quality -profile:v high444 -codec:a aac -ac 2 -crf constantRateFactor -flags -global_header -strict experimental -f segment -segment_list playlist.m3u8 -segment_list_flags +live -segment_time 10 tmp/out%03d.ts".replace('inputfile',quoterise(filepath)).replace('quality',self.qualities[self.q]).replace('constantRateFactor',str(self.crf))
+		cmd = u"./ffmpeg -i inputfile -map 0 -map -0:s -dn -codec:v libx264 -preset quality -profile:v high444 -codec:a aac -ac 2 -crf constantRateFactor -flags -global_header -strict experimental -f segment -segment_list playlist.m3u8 -segment_list_flags +live -segment_time 10 tmp/out%03d.ts".replace('inputfile',quoterise(filepath)).replace('quality',self.qualities[self.q]).replace('constantRateFactor',str(self.crf))
 		
 		self.checkingThread = minCheckThread(self)
 		self.checkingThread.daemon = True
@@ -172,7 +172,7 @@ def decodeShlex(shellparts):
 
 def getFrame(filepath,outputname):
 	if not (os.path.exists(outputname+'.png')):
-		cmd = "./ffmpeg -ss 00:02:30 -i %s -f image2 -vframes 1 -s \"160x120\" %s.png"%(quoterise(filepath),quoterise(outputname))
+		cmd = u"./ffmpeg -ss 00:02:30 -i %s -f image2 -vframes 1 -s \"160x120\" %s.png"%(quoterise(filepath),quoterise(outputname))
 		global windows
 		if windows:
 			cmd.replace('ffmpeg','ffmpeg.exe')

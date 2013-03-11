@@ -82,7 +82,7 @@ class template():
 		if len(showsString) < 2:
 			showsString += '<div id="noShows">No shows found <span id="sadFace">:(</span>, please check your path settings.</div>'
 		filledTemplate = self.templateString.replace('[[dunstable]]',showsString)
-		return str(filledTemplate)
+		return str(filledTemplate.encode('utf-8'))
 		
 	#when given a list will return two lists, one with odd items and one with even within a list 
 	def unzip(self,zippedlist):
