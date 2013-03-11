@@ -38,7 +38,8 @@ class Converter():
 		if windows:
 			cmd.replace('ffmpeg','ffmpeg.exe')
 		
-		cmd = shlex.split(cmd)
+		s = cmd.encode('utf-8')
+		cmd = decodeShlex(shlex.split(s))
 		
 		print cmd
 		fh = open("NUL","w")
@@ -166,6 +167,8 @@ class minCheckThread(threading.Thread):
 		
 def quoterise(s): 
 	return '"'+s+'"'
+def decodeShlex(shellparts):
+	return [unicode(spart,'utf-8') for spart in shellparts]
 
 def getFrame(filepath,outputname):
 	if not (os.path.exists(outputname+'.png')):
@@ -174,7 +177,11 @@ def getFrame(filepath,outputname):
 		if windows:
 			cmd.replace('ffmpeg','ffmpeg.exe')
 			
-		fh = open("NUL","w")	
-		subprocess.call(shlex.split(cmd),shell=False,stdout = fh, stderr = fh)
+		fh = open("NUL","w")
+		
+		s = cmd.encode('utf-8')
+		cmd = decodeShlex(shlex.split(s))
+			
+		subprocess.call(cmd,shell=False,stdout = fh, stderr = fh)
 		#subprocess.call(shlex.split(cmd),shell=False)
 		fh.close()
